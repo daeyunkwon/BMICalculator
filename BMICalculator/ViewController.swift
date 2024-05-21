@@ -49,19 +49,17 @@ class ViewController: UIViewController {
     }
     
     func configureTextField() {
-        heightTextField.layer.cornerRadius = 20
-        heightTextField.layer.borderColor = UIColor.darkGray.cgColor
-        heightTextField.layer.borderWidth = 2
-        heightTextField.borderStyle = .none
-        heightTextField.textAlignment = .center
-        heightTextField.returnKeyType = .done
-        
-        weightTextField.layer.cornerRadius = 20
-        weightTextField.layer.borderColor = UIColor.darkGray.cgColor
-        weightTextField.layer.borderWidth = 2
-        weightTextField.borderStyle = .none
-        weightTextField.textAlignment = .center
-        weightTextField.returnKeyType = .done
+        setupTextFieldUI(heightTextField)
+        setupTextFieldUI(weightTextField)
+    }
+    
+    func setupTextFieldUI(_ textField: UITextField) {
+        textField.layer.cornerRadius = 20
+        textField.layer.borderColor = UIColor.darkGray.cgColor
+        textField.layer.borderWidth = 2
+        textField.borderStyle = .none
+        textField.textAlignment = .center
+        textField.returnKeyType = .done
     }
     
     func configureButton() {
@@ -100,17 +98,16 @@ class ViewController: UIViewController {
         guard let weightText = weightTextField.text else {return}
         
         guard let height = Double(heightText) else {
-            print("키 값 이상으로 계산 실패")
+            print("텍스트필드 키 값 Double로 변환 실패")
             return
         }
         guard let weight = Double(weightText) else {
-            print("몸무게 값 이상으로 계산 실패")
+            print("텍스트필드 몸무게 값 Double로 변환 실패")
             return
         }
         
         var calculatedValue = ((weight / (height * height)) * 1000000).rounded()
         calculatedValue = calculatedValue / 100
-        print(calculatedValue)
         
         var message: String = ""
         
@@ -129,10 +126,10 @@ class ViewController: UIViewController {
             break
         }
         
-        showCalculateAlert(message: message)
+        showCalculateResultAlert(message: message)
     }
     
-    func showCalculateAlert(message: String) {
+    func showCalculateResultAlert(message: String) {
         let alert = UIAlertController(title: "계산 결과", message: message, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "확인", style: .default))
@@ -141,29 +138,26 @@ class ViewController: UIViewController {
     }
     
     @IBAction func randomButtonTapped(_ sender: UIButton) {
+        let randomHeightValue = Float.random(in: 0...300)
+        let randomWeightValue = Float.random(in: 0...200)
         
+        heightTextField.text = makeNumberFormatter(value: randomHeightValue)
+        weightTextField.text = makeNumberFormatter(value: randomWeightValue)
+    }
+    
+    func makeNumberFormatter(value: Float) -> String? {
         let numberFormatter = NumberFormatter()
         numberFormatter.roundingMode = .floor
         
-        let randomHeightValue = Float.random(in: 0...300)
-        if randomHeightValue > 99 {
+        if value > 99 {
             numberFormatter.maximumSignificantDigits = 5
-        } else if randomHeightValue < 10 {
+        } else if value < 10 {
             numberFormatter.maximumSignificantDigits = 3
         } else {
             numberFormatter.maximumSignificantDigits = 4
         }
-        heightTextField.text = numberFormatter.string(from: randomHeightValue as NSNumber)
         
-        let randomWeightValue = Float.random(in: 0...200)
-        if randomWeightValue > 99 {
-            numberFormatter.maximumSignificantDigits = 5
-        } else if randomWeightValue < 10 {
-            numberFormatter.maximumSignificantDigits = 3
-        } else {
-            numberFormatter.maximumSignificantDigits = 4
-        }
-        weightTextField.text = numberFormatter.string(from: randomWeightValue as NSNumber)
+        return numberFormatter.string(from: value as NSNumber)
     }
 }
 
