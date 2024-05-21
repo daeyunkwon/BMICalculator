@@ -148,14 +148,7 @@ class ViewController: UIViewController {
     func makeNumberFormatter(value: Float) -> String? {
         let numberFormatter = NumberFormatter()
         numberFormatter.roundingMode = .floor
-        
-        if value > 99 {
-            numberFormatter.maximumSignificantDigits = 5
-        } else if value < 10 {
-            numberFormatter.maximumSignificantDigits = 3
-        } else {
-            numberFormatter.maximumSignificantDigits = 4
-        }
+        numberFormatter.maximumFractionDigits = 2 //소수점 뒤에 최대 자리 수 지정
         
         return numberFormatter.string(from: value as NSNumber)
     }
