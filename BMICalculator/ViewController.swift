@@ -123,7 +123,7 @@ class ViewController: UIViewController {
         case 30.0...:
             message = "나의 신체질량지수(BMI): \(calculatedValue)(고도비만)"
         default:
-            break
+            message = "Error"
         }
         
         showCalculateResultAlert(message: message)
@@ -141,8 +141,8 @@ class ViewController: UIViewController {
         let randomHeightValue = Float.random(in: 0...300)
         let randomWeightValue = Float.random(in: 0...200)
         
-        heightTextField.text = makeNumberFormatter(value: randomHeightValue)
-        weightTextField.text = makeNumberFormatter(value: randomWeightValue)
+        heightTextField.text = makeNumberFormatter(value: randomHeightValue) ?? "None"
+        weightTextField.text = makeNumberFormatter(value: randomWeightValue) ?? "None"
     }
     
     func makeNumberFormatter(value: Float) -> String? {
