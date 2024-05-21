@@ -53,11 +53,15 @@ class ViewController: UIViewController {
         heightTextField.layer.borderColor = UIColor.darkGray.cgColor
         heightTextField.layer.borderWidth = 2
         heightTextField.borderStyle = .none
+        heightTextField.textAlignment = .center
+        heightTextField.returnKeyType = .done
         
         weightTextField.layer.cornerRadius = 20
         weightTextField.layer.borderColor = UIColor.darkGray.cgColor
         weightTextField.layer.borderWidth = 2
         weightTextField.borderStyle = .none
+        weightTextField.textAlignment = .center
+        weightTextField.returnKeyType = .done
     }
     
     func configureButton() {
@@ -75,7 +79,13 @@ class ViewController: UIViewController {
         calculateButton.layer.cornerRadius = 18
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
     
+    @IBAction func keyboardDismiss(_ sender: UITextField) {
+        view.endEditing(true)
+    }
     
     
     
