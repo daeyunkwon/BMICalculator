@@ -95,6 +95,50 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func calculateButtonTapped(_ sender: UIButton) {
+        guard let heightText = heightTextField.text else {return}
+        guard let weightText = weightTextField.text else {return}
+        
+        guard let height = Double(heightText) else {
+            print("키 값 이상으로 계산 실패")
+            return
+        }
+        guard let weight = Double(weightText) else {
+            print("몸무게 값 이상으로 계산 실패")
+            return
+        }
+        
+        var calculatedValue = ((weight / (height * height)) * 1000000).rounded()
+        calculatedValue = calculatedValue / 100
+        print(calculatedValue)
+        
+        var message: String = ""
+        
+        switch calculatedValue {
+        case 0.0...18.4:
+            message = "나의 신체질량지수(BMI): \(calculatedValue)(저체중)"
+        case 18.5...22.9:
+            message = "나의 신체질량지수(BMI): \(calculatedValue)(정상)"
+        case 23.0...24.9:
+            message = "나의 신체질량지수(BMI): \(calculatedValue)(과체중)"
+        case 25.0...29.9:
+            message = "나의 신체질량지수(BMI): \(calculatedValue)(비만)"
+        case 30.0...:
+            message = "나의 신체질량지수(BMI): \(calculatedValue)(고도비만)"
+        default:
+            break
+        }
+        
+        showCalculateAlert(message: message)
+    }
+    
+    func showCalculateAlert(message: String) {
+        let alert = UIAlertController(title: "계산 결과", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        
+        present(alert, animated: true)
+    }
     
     
     
