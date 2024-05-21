@@ -41,10 +41,10 @@ class ViewController: UIViewController {
         subTitleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         subTitleLabel.numberOfLines = 0
         
-        heightLabel.text = "키가 어떻게 되시나요?"
+        heightLabel.text = "키가 어떻게 되시나요?(cm)"
         heightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         
-        weightLabel.text = "몸무게가 어떻게 되시나요?"
+        weightLabel.text = "몸무게가 어떻게 되시나요?(kg)"
         weightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
     }
     
@@ -140,9 +140,30 @@ class ViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    
-    
-
-
+    @IBAction func randomButtonTapped(_ sender: UIButton) {
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.roundingMode = .floor
+        
+        let randomHeightValue = Float.random(in: 0...300)
+        if randomHeightValue > 99 {
+            numberFormatter.maximumSignificantDigits = 5
+        } else if randomHeightValue < 10 {
+            numberFormatter.maximumSignificantDigits = 3
+        } else {
+            numberFormatter.maximumSignificantDigits = 4
+        }
+        heightTextField.text = numberFormatter.string(from: randomHeightValue as NSNumber)
+        
+        let randomWeightValue = Float.random(in: 0...200)
+        if randomWeightValue > 99 {
+            numberFormatter.maximumSignificantDigits = 5
+        } else if randomWeightValue < 10 {
+            numberFormatter.maximumSignificantDigits = 3
+        } else {
+            numberFormatter.maximumSignificantDigits = 4
+        }
+        weightTextField.text = numberFormatter.string(from: randomWeightValue as NSNumber)
+    }
 }
 
