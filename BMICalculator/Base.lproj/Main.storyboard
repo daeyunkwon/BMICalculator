@@ -89,6 +89,9 @@
                                 <buttonConfiguration key="configuration" style="plain">
                                     <imageReference key="image" image="eye.slash.circle" catalog="system" symbolScale="large"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="securityButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1kn-Lt-kBZ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxp-L0-del">
                                 <rect key="frame" x="186.66666666666663" y="486" width="180.33333333333337" height="30"/>

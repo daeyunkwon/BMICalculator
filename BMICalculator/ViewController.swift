@@ -87,6 +87,13 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     
+    @IBAction func securityButtonTapped(_ sender: UIButton) {
+        if weightTextField.isSecureTextEntry {
+            weightTextField.isSecureTextEntry = false
+        } else {
+            weightTextField.isSecureTextEntry = true
+        }
+    }
     
     
     
