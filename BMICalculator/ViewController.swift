@@ -66,7 +66,7 @@ class ViewController: UIViewController {
     func configureButton() {
         securityButton.tintColor = .lightGray
         
-        randomButton.setTitleColor(UIColor(red: 0.76, green: 0.07, blue: 0.12, alpha: 1.00), for: .normal)
+        randomButton.setTitleColor(.systemBlue, for: .normal)
         randomButton.setTitle("랜덤으로 BMI 계산하기", for: .normal)
         randomButton.titleLabel?.font = .systemFont(ofSize: 14)
         randomButton.contentHorizontalAlignment = .right
