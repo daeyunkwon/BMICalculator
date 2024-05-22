@@ -240,7 +240,7 @@ class ViewController: UIViewController {
     }
     
     func showDeleteAlert() {
-        let alert = UIAlertController(title: "시스템 알림", message: "키와 몸무게 데이터가 초기화 되었습니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "알림", message: "초기화 되었습니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         self.present(alert, animated: true)
     }
