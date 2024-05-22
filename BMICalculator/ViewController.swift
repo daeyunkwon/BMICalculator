@@ -108,9 +108,18 @@ class ViewController: UIViewController {
     }
     
     @IBAction func calculateButtonTapped(_ sender: UIButton) {
-        guard let heightText = heightTextField.text else {return}
-        guard let weightText = weightTextField.text else {return}
-        guard let nicknameText = nicknameTextField.text, nicknameText != "" else {return}
+        guard let heightText = heightTextField.text, heightText != "" else {
+            showEmptyAlert(target: heightTextField)
+            return
+        }
+        guard let weightText = weightTextField.text, weightText != "" else {
+            showEmptyAlert(target: weightTextField)
+            return
+        }
+        guard let nicknameText = nicknameTextField.text, nicknameText != "" else {
+            showEmptyAlert(target: nicknameTextField)
+            return
+        }
         
         guard let height = Double(heightText) else {
             print("텍스트필드 키 값 Double로 변환 실패")
@@ -143,6 +152,26 @@ class ViewController: UIViewController {
         
         showCalculateResultAlert(message: message)
         saveData(nicknameValue: nicknameText, heightValue: heightText, weightValue: weightText)
+    }
+    
+    func showEmptyAlert(target: UITextField) {
+        var text = ""
+        
+        if target == nicknameTextField {
+            text = "닉네임"
+        }
+        
+        if target == heightTextField {
+            text = "키"
+        }
+        
+        if target == weightTextField {
+            text = "몸무게"
+        }
+        
+        let alert = UIAlertController(title: "알림", message: "\(text)를 입력해주세요.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "깜빡했어요", style: .default))
+        self.present(alert, animated: true)
     }
     
     func showCalculateResultAlert(message: String) {
