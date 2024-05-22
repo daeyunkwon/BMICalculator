@@ -12,6 +12,9 @@ class ViewController: UIViewController {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var subTitleLabel: UILabel!
     
+    @IBOutlet var nicknameLabel: UILabel!
+    @IBOutlet var nicknameTextField: UITextField!
+    
     @IBOutlet var heightLabel: UILabel!
     @IBOutlet var heightTextField: UITextField!
     
@@ -44,6 +47,9 @@ class ViewController: UIViewController {
         subTitleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         subTitleLabel.numberOfLines = 0
         
+        nicknameLabel.text = "닉네임을 알려주세요"
+        nicknameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        
         heightLabel.text = "키가 어떻게 되시나요?(cm)"
         heightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         
@@ -52,6 +58,7 @@ class ViewController: UIViewController {
     }
     
     func configureTextField() {
+        setupTextFieldUI(nicknameTextField)
         setupTextFieldUI(heightTextField)
         setupTextFieldUI(weightTextField)
     }
@@ -103,6 +110,7 @@ class ViewController: UIViewController {
     @IBAction func calculateButtonTapped(_ sender: UIButton) {
         guard let heightText = heightTextField.text else {return}
         guard let weightText = weightTextField.text else {return}
+        guard let nicknameText = nicknameTextField.text, nicknameText != "" else {return}
         
         guard let height = Double(heightText) else {
             print("텍스트필드 키 값 Double로 변환 실패")
@@ -134,11 +142,11 @@ class ViewController: UIViewController {
         }
         
         showCalculateResultAlert(message: message)
-        saveData(heightValue: heightText, weightValue: weightText)
+        saveData(nicknameValue: nicknameText, heightValue: heightText, weightValue: weightText)
     }
     
     func showCalculateResultAlert(message: String) {
-        let alert = UIAlertController(title: "계산 결과", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "\(nicknameTextField.text ?? "none")님의 BMI 계산 결과", message: message, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         
@@ -162,6 +170,12 @@ class ViewController: UIViewController {
     }
     
     func fetchData() {
+        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
+            nicknameTextField.text = nickname
+        } else {
+            nicknameTextField.text = nil
+        }
+        
         if let height = UserDefaults.standard.string(forKey: "height") {
             heightTextField.text = height
         } else {
@@ -175,7 +189,8 @@ class ViewController: UIViewController {
         }
     }
     
-    func saveData(heightValue: String, weightValue: String) {
+    func saveData(nicknameValue: String ,heightValue: String, weightValue: String) {
+        UserDefaults.standard.setValue(nicknameValue, forKey: "nickname")
         UserDefaults.standard.setValue(heightValue, forKey: "height")
         UserDefaults.standard.setValue(weightValue, forKey: "weight")
     }
@@ -183,12 +198,14 @@ class ViewController: UIViewController {
     @IBAction func resetButtonTapped(_ sender: UIButton) {
         deleteData()
         
+        nicknameTextField.text = nil
         heightTextField.text = nil
         weightTextField.text = nil
         showDeleteAlert()
     }
     
     func deleteData() {
+        UserDefaults.standard.removeObject(forKey: "nickname")
         UserDefaults.standard.removeObject(forKey: "height")
         UserDefaults.standard.removeObject(forKey: "weight")
     }
