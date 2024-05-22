@@ -156,8 +156,14 @@ class ViewController: UIViewController {
     }
     
     func fetchData() {
-        guard let height = UserDefaults.standard.string(forKey: "height") else {return}
-        guard let weight = UserDefaults.standard.string(forKey: "weight") else {return}
+        guard let height = UserDefaults.standard.string(forKey: "height") else {
+            print("UserDefaults에 저장된 height 데이터 불러오기 실패")
+            return
+        }
+        guard let weight = UserDefaults.standard.string(forKey: "weight") else {
+            print("UserDefaults에 저장된 weight 데이터 불러오기 실패")
+            return
+        }
         
         heightTextField.text = height
         weightTextField.text = weight
