@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     @IBOutlet var randomButton: UIButton!
     @IBOutlet var calculateButton: UIButton!
     
+    @IBOutlet var resetButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -76,6 +78,10 @@ class ViewController: UIViewController {
         calculateButton.tintColor = .white
         calculateButton.backgroundColor = .purple
         calculateButton.layer.cornerRadius = 18
+        
+        resetButton.setTitle("초기화", for: .normal)
+        resetButton.tintColor = .systemRed
+        resetButton.titleLabel?.font = .systemFont(ofSize: 14)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -156,22 +162,42 @@ class ViewController: UIViewController {
     }
     
     func fetchData() {
-        guard let height = UserDefaults.standard.string(forKey: "height") else {
-            print("UserDefaults에 저장된 height 데이터 불러오기 실패")
-            return
-        }
-        guard let weight = UserDefaults.standard.string(forKey: "weight") else {
-            print("UserDefaults에 저장된 weight 데이터 불러오기 실패")
-            return
+        if let height = UserDefaults.standard.string(forKey: "height") {
+            heightTextField.text = height
+        } else {
+            heightTextField.text = nil
         }
         
-        heightTextField.text = height
-        weightTextField.text = weight
+        if let weight = UserDefaults.standard.string(forKey: "weight") {
+            weightTextField.text = weight
+        } else {
+            weightTextField.text = nil
+        }
     }
     
     func saveData(heightValue: String, weightValue: String) {
         UserDefaults.standard.setValue(heightValue, forKey: "height")
         UserDefaults.standard.setValue(weightValue, forKey: "weight")
     }
+    
+    @IBAction func resetButtonTapped(_ sender: UIButton) {
+        deleteData()
+        
+        heightTextField.text = nil
+        weightTextField.text = nil
+        showDeleteAlert()
+    }
+    
+    func deleteData() {
+        UserDefaults.standard.removeObject(forKey: "height")
+        UserDefaults.standard.removeObject(forKey: "weight")
+    }
+    
+    func showDeleteAlert() {
+        let alert = UIAlertController(title: "시스템 알림", message: "키와 몸무게 데이터가 초기화 되었습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        self.present(alert, animated: true)
+    }
+    
 }
 
