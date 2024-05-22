@@ -25,6 +25,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        fetchData()
     }
     
     func configureUI() {
@@ -127,6 +128,7 @@ class ViewController: UIViewController {
         }
         
         showCalculateResultAlert(message: message)
+        saveData(heightValue: heightText, weightValue: weightText)
     }
     
     func showCalculateResultAlert(message: String) {
@@ -151,6 +153,19 @@ class ViewController: UIViewController {
         numberFormatter.maximumFractionDigits = 2 //소수점 뒤에 최대 자리 수 지정
         
         return numberFormatter.string(from: value as NSNumber)
+    }
+    
+    func fetchData() {
+        guard let height = UserDefaults.standard.string(forKey: "height") else {return}
+        guard let weight = UserDefaults.standard.string(forKey: "weight") else {return}
+        
+        heightTextField.text = height
+        weightTextField.text = weight
+    }
+    
+    func saveData(heightValue: String, weightValue: String) {
+        UserDefaults.standard.setValue(heightValue, forKey: "height")
+        UserDefaults.standard.setValue(weightValue, forKey: "weight")
     }
 }
 
