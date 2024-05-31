@@ -39,58 +39,6 @@ class ViewController: UIViewController {
         configureButton()
     }
     
-    func configureLabel() {
-        titleLabel.text = "BMI Calculator"
-        titleLabel.font = .systemFont(ofSize: 28, weight: .heavy)
-        
-        subTitleLabel.text = "당신의 BMI 지수를\n알려드릴게요."
-        subTitleLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        subTitleLabel.numberOfLines = 0
-        
-        nicknameLabel.text = "닉네임을 알려주세요"
-        nicknameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        
-        heightLabel.text = "키가 어떻게 되시나요?(cm)"
-        heightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        
-        weightLabel.text = "몸무게가 어떻게 되시나요?(kg)"
-        weightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-    }
-    
-    func configureTextField() {
-        setupTextFieldUI(nicknameTextField)
-        setupTextFieldUI(heightTextField)
-        setupTextFieldUI(weightTextField)
-    }
-    
-    func setupTextFieldUI(_ textField: UITextField) {
-        textField.layer.cornerRadius = 20
-        textField.layer.borderColor = UIColor.darkGray.cgColor
-        textField.layer.borderWidth = 2
-        textField.borderStyle = .none
-        textField.textAlignment = .center
-        textField.returnKeyType = .done
-    }
-    
-    func configureButton() {
-        securityButton.tintColor = .lightGray
-        
-        randomButton.setTitleColor(.systemBlue, for: .normal)
-        randomButton.setTitle("랜덤으로 BMI 계산하기", for: .normal)
-        randomButton.titleLabel?.font = .systemFont(ofSize: 14)
-        randomButton.contentHorizontalAlignment = .right
-        
-        calculateButton.setTitle("결과 확인", for: .normal)
-        calculateButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        calculateButton.tintColor = .white
-        calculateButton.backgroundColor = .purple
-        calculateButton.layer.cornerRadius = 18
-        
-        resetButton.setTitle("초기화", for: .normal)
-        resetButton.tintColor = .systemRed
-        resetButton.titleLabel?.font = .systemFont(ofSize: 14)
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -102,8 +50,10 @@ class ViewController: UIViewController {
     @IBAction func securityButtonTapped(_ sender: UIButton) {
         if weightTextField.isSecureTextEntry {
             weightTextField.isSecureTextEntry = false
+            securityButton.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
         } else {
             weightTextField.isSecureTextEntry = true
+            securityButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         }
     }
     
@@ -199,19 +149,19 @@ class ViewController: UIViewController {
     }
     
     func fetchData() {
-        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
+        if let nickname = UserDefaultsManager.nickname {
             nicknameTextField.text = nickname
         } else {
             nicknameTextField.text = nil
         }
         
-        if let height = UserDefaults.standard.string(forKey: "height") {
+        if let height = UserDefaultsManager.height {
             heightTextField.text = height
         } else {
             heightTextField.text = nil
         }
         
-        if let weight = UserDefaults.standard.string(forKey: "weight") {
+        if let weight = UserDefaultsManager.weight {
             weightTextField.text = weight
         } else {
             weightTextField.text = nil
@@ -219,9 +169,9 @@ class ViewController: UIViewController {
     }
     
     func saveData(nicknameValue: String ,heightValue: String, weightValue: String) {
-        UserDefaults.standard.setValue(nicknameValue, forKey: "nickname")
-        UserDefaults.standard.setValue(heightValue, forKey: "height")
-        UserDefaults.standard.setValue(weightValue, forKey: "weight")
+        UserDefaultsManager.nickname = nicknameValue
+        UserDefaultsManager.height = heightValue
+        UserDefaultsManager.weight = weightValue
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
@@ -230,20 +180,76 @@ class ViewController: UIViewController {
         nicknameTextField.text = nil
         heightTextField.text = nil
         weightTextField.text = nil
-        showDeleteAlert()
+        showDeleteCompleteAlert()
     }
     
     func deleteData() {
-        UserDefaults.standard.removeObject(forKey: "nickname")
-        UserDefaults.standard.removeObject(forKey: "height")
-        UserDefaults.standard.removeObject(forKey: "weight")
+        UserDefaultsManager.removeNickname()
+        UserDefaultsManager.removeHeight()
+        UserDefaultsManager.removeWeight()
     }
     
-    func showDeleteAlert() {
+    func showDeleteCompleteAlert() {
         let alert = UIAlertController(title: "알림", message: "초기화 되었습니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         self.present(alert, animated: true)
     }
     
+}
+
+//MARK: - Configurations
+
+extension ViewController {
+    func configureLabel() {
+        titleLabel.text = "BMI Calculator"
+        titleLabel.font = .systemFont(ofSize: 28, weight: .heavy)
+        
+        subTitleLabel.text = "당신의 BMI 지수를\n알려드릴게요."
+        subTitleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        subTitleLabel.numberOfLines = 0
+        
+        nicknameLabel.text = "닉네임을 알려주세요"
+        nicknameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        
+        heightLabel.text = "키가 어떻게 되시나요?(cm)"
+        heightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        
+        weightLabel.text = "몸무게가 어떻게 되시나요?(kg)"
+        weightLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+    }
+    
+    func configureTextField() {
+        setupTextFieldUI(nicknameTextField)
+        setupTextFieldUI(heightTextField)
+        setupTextFieldUI(weightTextField)
+    }
+    
+    func setupTextFieldUI(_ textField: UITextField) {
+        textField.layer.cornerRadius = 20
+        textField.layer.borderColor = UIColor.darkGray.cgColor
+        textField.layer.borderWidth = 2
+        textField.borderStyle = .none
+        textField.textAlignment = .center
+        textField.returnKeyType = .done
+    }
+    
+    func configureButton() {
+        securityButton.tintColor = .lightGray
+        
+        randomButton.setTitleColor(.systemBlue, for: .normal)
+        randomButton.setTitle("랜덤으로 BMI 계산하기", for: .normal)
+        randomButton.titleLabel?.font = .systemFont(ofSize: 14)
+        randomButton.contentHorizontalAlignment = .right
+        
+        calculateButton.setTitle("결과 확인", for: .normal)
+        calculateButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        calculateButton.tintColor = .white
+        calculateButton.backgroundColor = .purple
+        calculateButton.layer.cornerRadius = 18
+        
+        resetButton.setTitle("초기화", for: .normal)
+        resetButton.tintColor = .systemRed
+        resetButton.titleLabel?.font = .systemFont(ofSize: 14)
+    }
 }
 
